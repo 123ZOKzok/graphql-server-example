@@ -21,6 +21,15 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 //     books: [Book]
 //   }
 // `;
+// Resolvers define how to fetch the types defined in your schema.
+// This resolver retrieves books from the "books" array above.
+// The ApolloServer constructor requires two parameters: your schema
+// definition and your set of resolvers.
+// Passing an ApolloServer instance to the `startStandaloneServer` function:
+//  1. creates an Express app
+//  2. installs your ApolloServer instance as middleware
+//  3. prepares your app to handle incoming requests
+
 const books = [
     {
       title: 'The Awakening',
@@ -31,9 +40,19 @@ const books = [
       author: 'Paul Auster',
     },
   ];
-  
+
   const resolvers = {
     Query: {
       books: () => books,
     },
   };
+
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
+  const { url } = await startStandaloneServer(server, {
+    listen: { port: 4000 },
+  });
+
+console.log(`🚀  Server ready at: ${url}`);
